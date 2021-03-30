@@ -3,11 +3,14 @@ import axios from "axios"
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 const Signin = () => {
+  const [category , setCategory] = useState();
+
   const[user,setUser]=useState({
 name:'',
 email:'',
 password:''
-
+,
+    category: ""
   })
   const[count,setCount]=useState()
 
@@ -22,6 +25,21 @@ password:''
   //   .then(res=>console.log(res))
   //   .catch(err=>console.log(err.response.data))
   // },[])
+
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/api/category/all")
+      .then(res => {
+        console.log("Categories RECEIVED: ", res.data);
+        setCategory(res.data);
+      })
+      .catch(err => {
+        console.log("AXIOS ERROR: ", err);
+      });
+  },[]);
+
+
 const handleSubmit=(e)=>{
 e.preventDefault()
 axios.post('http://localhost:3001/api/user/register',
@@ -36,6 +54,13 @@ axios.post('http://localhost:3001/api/user/register',
   return ( <div>
 <h1>Register!!!</h1>
 <form onSubmit={(e)=>handleSubmit(e)}>
+        <label for="matches">Choose a category:</label>
+          <select onChange={(e)=>setUser({...user,category:e.target.value})} 
+>
+            {category && category.map(i => (
+              <option  value={i._id}>{i.name}</option>
+            ))}
+          </select><br></br>
 
 <label>Name : </label><br></br>
 <input id="name"  type='text' value={user.name} onChange={e=>setUser({...user,name:e.target.value})} /> <br></br>

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
+const {ObjectId} = mongoose.Schema;
 const userSchema= new Schema ({
   name:{
     type:String,
@@ -25,8 +25,17 @@ password:{
 role:{
   type:Number,
   default:0
-}
-,
+},
+category:{
+  type: ObjectId,
+  ref: "Category", 
+  required : true
+},
+
+active:{
+  type:Number,
+  default:1 //1 means active 0 means inactive
+},
 date:{type:Date,
 default:Date.now}
 })

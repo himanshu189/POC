@@ -42,7 +42,8 @@ const hashPassword= await bcrypt.hash(req.body.password,salt)
 name:req.body.name,
 email:req.body.email,
 password:hashPassword,
-role:req.body.role
+role:req.body.role,
+category:req.body.category
   })
   user.save()
   .then(result=>res.send(result))
@@ -67,6 +68,9 @@ if(!user) return res.status(400).send('Invalid email')
  const validPassword = await bcrypt.compare(req.body.password, user.password);
  if(!validPassword) return res.status(400).send('invalid password')
 
+//   checking active or inactive
+
+if(user.active==0) return res.status(400).send('This account is Inactive')
 
 
 // create and assign a token

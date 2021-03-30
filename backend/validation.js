@@ -11,6 +11,8 @@ const schema = Joi.object({
 
   password: Joi.string().min(6).required(),
   role: Joi.number(),
+  category: Joi.string().required(),
+
 
 
 }
@@ -41,6 +43,7 @@ const loginValidation =(data)=>{
       email: Joi.string().min(6).required().email(),
     
       role: Joi.number(),
+      category:Joi.required()
     
     
     }
