@@ -79,7 +79,7 @@ setCount1(1)
 const handlePass=(id)=>{
 console.log(password)
   axios.put(`http://localhost:3001/api/user/${id}`,password)
-  .then(res=>console.log(res))
+  .then(res=>alert("done"))
   .catch(err=>console.log(err))
 setCount1(0)
 

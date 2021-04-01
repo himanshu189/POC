@@ -122,7 +122,7 @@ console.log(user.active)
 {users &&users.map((user,i)=>(
   user.role==1&&<h1>hello {user.name}  (admin) </h1>
 ))}
-
+{console.log(users)}
 {count==0?<button className="btn btn-lg btn-primary m-5" onClick={handleAdd} >Add New </button>:<div>
 <label for="matches">Choose a category:</label>
           <select  onChange={(e)=>setData({...data,category:e.target.value})}
@@ -152,11 +152,7 @@ console.log(user.active)
       
 <h3>{user.name}</h3>
 <h3>{user.email}</h3>
-<h3>Category: { category&& category.map(x=>{
-  if(user.category==x._id){
-    return x.name
-  }
-}) } </h3>
+<h3>Category: { user.category.name } </h3>
 
 <h3> Registration Date : {formatDate(user.date)} </h3>
 

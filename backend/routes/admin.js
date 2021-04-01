@@ -7,9 +7,13 @@ const verify = require('./privateRoute')
 
 router.get('/',verify, async(req,res)=>{
 
-var result= await User.find()
+var auth= await User.findById({_id:req.user._id})
+
+if(auth.role==0) return res.status(400).send('Only Admin is allowed')
+var result= await User.find().populate("category")
  
     res.send(result.map(result=>(
+
       {
         name:result.name,
         _id:result._id,
