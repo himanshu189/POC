@@ -1,13 +1,18 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-const User = () => {
+const User = ({inn,setinn}) => {
   const[data,setData]=useState()
   const [category , setCategory] = useState();
 
   const[count,setCount]=useState(0)
   const[count1,setCount1]=useState(0)
   const[change,setChange]=useState(true)
-  const[password,setPassword]=useState({password:''})
+  const[password,setPassword]=useState({
+    oldPassword:'',
+    newPassword:'',
+    confirmNewPassword:''
+
+})
   const[user,setUser]=useState({
     name:'',
     email:'',
@@ -51,7 +56,7 @@ const handleChange2=()=>{
     axios.put(`http://localhost:3001/api/admin/${id}`,
     user
    )
-   .then(res=>{alert("Successfully editted");
+   .then(res=>{alert("Successfully updated");
    setCount(0)   
    setChange(!change)
    
@@ -79,9 +84,13 @@ setCount1(1)
 const handlePass=(id)=>{
 console.log(password)
   axios.put(`http://localhost:3001/api/user/${id}`,password)
-  .then(res=>alert("done"))
-  .catch(err=>console.log(err))
-setCount1(0)
+  .then(res=>{alert(res.data)
+    sessionStorage.removeItem('auth-token')
+
+setinn(false)
+})
+  .catch(err=>alert(err.response.data))
+
 
 }
 
@@ -115,9 +124,12 @@ data && count===1? <div>
 
 <button className='btn btn-lg btn-primary m-5' onClick={handleChange} >Edit Info</button>
 {count1?<div>
-  <label>Password : </label><br></br>
-<input id="password" type='password'  value={password.password} onChange={e=>setPassword({password:e.target.value})} /><br></br>
-
+  <label> Current Password : </label><br></br>
+<input id="oldpassword" type='password'  value={password.oldPassword} onChange={e=>setPassword({...password,oldPassword:e.target.value})} /><br></br>
+<label> New Password : </label><br></br>
+<input id="newpassword" type='password'  value={password.newPassword} onChange={e=>setPassword({...password,newPassword:e.target.value})} /><br></br> 
+<label> Confirm New Password : </label><br></br>
+<input id="confirmnewpassword" type='password'  value={password.confirmNewPassword} onChange={e=>setPassword({...password,confirmNewPassword:e.target.value})} /><br></br>
 
 <button className='btn btn-sm btn-warning m-2' onClick={()=>setCount1(0)} >cancel</button>
 <button className='btn btn-sm btn-success m-2' onClick={()=>handlePass(data._id)} >Save</button>

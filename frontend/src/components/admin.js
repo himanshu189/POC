@@ -7,9 +7,15 @@ const Admin = () => {
   const[count,setCount]=useState(0)
   const[count2,setCount2]=useState(0)
   const[ind,setInd]=useState()
+  const[ind1,setInd1]=useState()
+
   const [category , setCategory] = useState();
 const[active,setActive]=useState({active:1})
 const[deactive,setdeActive]=useState({active:0})
+const[search,setSearch]=useState({
+  search:''
+})
+const[filter,setFilter]=useState([])
 
   const[data,setData]=useState({
     name:'',
@@ -51,6 +57,19 @@ axios.get("http://localhost:3001/api/admin", token&&{
 .catch(err=>console.log(err))
 
 },[change])
+
+
+// live search
+useEffect(()=>{
+  const token =sessionStorage.getItem('auth-token')
+
+search.search!="" && axios.post("http://localhost:3001/api/admin/search", search
+)
+.then(res=> setFilter(res.data))
+.catch(err=>console.log(err))
+
+},[search,change])
+
 const handleDelete=(id)=>{
 
 axios.delete(`http://localhost:3001/api/admin/${id}`)
@@ -66,6 +85,11 @@ const handleEdit=(i)=>{
   setInd(i)
   setCount2(1)
  }
+ const handleEdit1=(i)=>{
+  setInd1(i)
+  setCount2(1)
+ }
+ 
 const HandleAdding=()=>{
   axios.post('http://localhost:3001/api/user/register',
      data
@@ -146,15 +170,23 @@ console.log(user.active)
 
   <div className='marg'>
 
-    {users &&users.map((user,i)=>(
+
+
+
+<input type="text" className='m-3 text center' placeholder="search by Username" style={{width:"70%"}} value={search.search} onChange={(e)=>setSearch({...search,search:e.target.value})}  />
+
+
+    { search.search==''?
+      
+      users &&users.map((user,i)=>(
       
       user.role==0? <div className='card bg-dark text-light'>
       
-<h3>{user.name}</h3>
-<h3>{user.email}</h3>
-<h3>Category: { user.category.name } </h3>
+<h3><b> Username: </b>{user.name}</h3>
+<h3> <b>Email: </b> {user.email}</h3>
+<h3><b>Category: </b>{ user.category.name } </h3>
 
-<h3> Registration Date : {formatDate(user.date)} </h3>
+<h3><b> Registration Date : </b>{formatDate(user.date)} </h3>
 
 {count2 === 1 && ind &&  i === ind ?<div>
 <label>Name : </label><br></br>
@@ -181,7 +213,57 @@ console.log(user.active)
 }
 
       </div>:<span></span>
-    ))  } </div>
+    )) :
+    
+    
+    
+    
+    filter.length>0 ? filter.map((user,i)=>(
+      
+      user.role==0? <div className='card bg-dark text-light'>
+      
+<h3><b> Username: </b>{user.name}</h3>
+<h3><b> email: </b>{user.email}</h3>
+<h3><b> Category: </b>{ user.category.name } </h3>
+
+<h3><b> Registration Date : </b>{formatDate(user.date)} </h3>
+{console.log("hkjh",count2 === 1 && ind1 )}
+{count2 === 1 &&   i === ind1 ?<div>
+<label>Name : </label><br></br>
+<input id="name"  type='text' value={data2.name} onChange={e=>setData2({...data2,name:e.target.value})} /> <br></br>
+<label>Email : </label><br></br>
+<input id="email" type='email'  value={data2.email} onChange={e=>setData2({...data2,email:e.target.value})} /><br></br>
+<label for="matches">Choose a category:</label>
+          <select onChange={(e)=>setData2({...data2,category:e.target.value})}
+>
+            {category && category.map(i => (
+              <option value={i._id}>{i.name}</option>
+            ))}
+          </select><br></br>
+<button button className="btn btn-sm btn-primary m-5" onClick={HandleAdding3} >cancel</button>
+
+<button button className="btn btn-sm btn-primary m-5" onClick={()=>HandleEditting(user._id)} >Edit</button>
+</div>:<button className='btn btn-sm btn-warning' onClick={()=>handleEdit1(i)} >edit</button>
+}
+
+
+<button className='btn btn-sm btn-danger' onClick={()=>handleDelete(user._id)} >delete</button>
+{ user.active==1? <button className='btn btn-sm btn-success' onClick={()=>handleActive(user,user._id)} >Deactivate user</button>:
+<button className='btn btn-sm btn-primary' onClick={()=>handleActive(user,user._id)} >Reactivate user</button>
+}
+
+      </div>:<span></span>
+    )
+    
+    ) :<h3>No Data found</h3>
+    
+    
+    
+    
+     }
+    
+    
+     </div>
   </div>  );
 }
  

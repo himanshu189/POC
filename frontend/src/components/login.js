@@ -32,6 +32,8 @@ setinn(true)
 <button className='btn btn-sm btn-primary m-2' type='submit'>Login</button>
 </form>
 <p>Don't have an account? <Link to='/signin'> Signin</Link></p>
+<Link to='/reset'> <h3>Forgot password?</h3></Link>
+
 
     {inn && <Redirect to="/role" />}
   </div> );

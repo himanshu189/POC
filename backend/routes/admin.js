@@ -33,21 +33,33 @@ var result= await User.find().populate("category")
 
 
 
-// res.send(result.map(result=>(
-//   {
-//     name:result.name,
-//     _id:result._id,
-//     email:result.email,
-//     date:result.date,
-//     role:result.role,
-//     category:result.category,
-//     active:result.active
-    
-    
-//       }
-// )))
+// live search
 
 
+router.post('/search', async(req,res)=>{
+  console.log(req.body.search);
+  
+ if( req.body.search=='') return res.status(400).send('nothing to search')
+
+  var result= await User.find({name:{$regex: req.body.search,$options: "$i"}}).populate("category")
+
+      res.send(result.map(result=>(
+  
+        {
+          name:result.name,
+          _id:result._id,
+          email:result.email,
+          date:result.date,
+          role:result.role,
+          category:result.category,
+          active:result.active
+          
+          
+            }
+      )))
+    
+  })
+  
 
 
 
@@ -127,5 +139,9 @@ router.put('/active/:id',(req,res)=>{
     .catch(err=>res.send(err))
 
 })
+
+
+
+
 
 module.exports=router

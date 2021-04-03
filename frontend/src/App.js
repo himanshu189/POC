@@ -6,6 +6,8 @@ import Role from './components/Role';
 import { BrowserRouter, Link, Redirect, Route, Switch } from 'react-router-dom';
 import Welcome from './components/Welcome';
 import { useEffect, useState } from 'react';
+import ResetPassword from './components/resetPassword';
+import NewPassword from './components/newPassword';
 function App() {
 
   const[out,setOut]=useState()
@@ -42,10 +44,13 @@ setre(true)
 </ul>   
 
   <Switch>
-<Route exact path="/" component={Welcome} />
 <Route exact path="/signin" component={Signin} />
+<Route exact path="/reset" component={ResetPassword} />
+<Route  path="/reset/:id" component={NewPassword} />
+
 <Route exact path="/login" component={props=> < Login inn={inn} setinn={setinn} />} />
-<Route exact path="/role" component={Role} />
+<Route exact path="/role" component={props=> <Role  inn={inn} setinn={setinn} />} />
+<Route  path="/" component={Welcome} />
 
   </Switch>
      {!inn && re && <Redirect to='/login'/>}

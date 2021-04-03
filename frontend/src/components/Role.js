@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Admin from './admin';
 import User from './user';
-const Role = () => {
+const Role = ({inn,setinn}) => {
     const[state,setState]=useState('')
 
 useEffect(()=>{
@@ -18,7 +18,7 @@ useEffect(()=>{
         console.log(res.data)
         setState(res.data)
       })
-      .catch(err =>         setState(err.response.data)
+      .catch(err =>  setState(err.response.data)
       );
 
 },[])
@@ -32,7 +32,7 @@ useEffect(()=>{
 
 
 
-{state=="0"?<User/>:state=="1"?<Admin/>:<h1>{state}</h1>}
+{state=="0"?<User  inn={inn} setinn={setinn} />:state=="1"?<Admin/>:<h1>{state}</h1>}
 
 
 

@@ -36,6 +36,12 @@ active:{
   type:Number,
   default:1 //1 means active 0 means inactive
 },
+token:String,
+expireToken:Date
+
+
+
+,
 date:{type:Date,
 default:Date.now}
 })
