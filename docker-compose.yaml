@@ -1,0 +1,38 @@
+version: "3"
+services:
+
+       frontend-react:
+           container_name: frontend-app
+           restart: always
+           build: ./frontend
+           ports:
+             - "4002:3000"
+           command: bash -c " npm install && npm start && tail -f /dev/null"
+           networks:
+           - redis
+           volumes: 
+            - /home/himanshutyagi/Desktop/Docker_fullStack/POC/frontend:/front
+
+             # redis:
+             #image: redis
+             #ports:
+             #- 6380:6379
+             #networks:
+             #- redis
+       backend-node:
+           container_name: backend-app
+           restart: always
+           build: ./backend
+           ports:
+             - "3001:3001"
+           command: bash -c "npm install && node index.js && tail -f /dev/null"
+           networks:
+           - redis
+           volumes: 
+            - /home/himanshutyagi/Desktop/Docker_fullStack/POC/backend:/back
+        
+
+networks:
+       redis:
+         driver: bridge
+
